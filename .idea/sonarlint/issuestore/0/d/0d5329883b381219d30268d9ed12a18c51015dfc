@@ -1,0 +1,21 @@
+
+„
+java:S1488†"fImmediately return this expression instead of assigning it to the temporary variable "locationNumber".(€ÁÂ 8‡¤õÈÃ1
+]	java:S125"<This block of commented-out lines of code should be removed.(¼è÷ïøÿÿÿÿ8á¤õÈÃ1
+L	java:S106G"+Replace this use of System.out by a logger.(Íõ¸¨úÿÿÿÿ8á¤õÈÃ1
+X	java:S125F"<This block of commented-out lines of code should be removed.(éİì’8á¤õÈÃ1
+M	java:S106é"+Replace this use of System.out by a logger.(Ç¡¡Îıÿÿÿÿ8ñ¤õÈÃ1
+Y	java:S125í"<This block of commented-out lines of code should be removed.(ûÚ™ı8ñ¤õÈÃ1
+r
+java:S1215ò"TDon't try to be smarter than the JVM, remove this call to run the garbage collector.(Ì°¬“8ñ¤õÈÃ1
+M	java:S106ó"+Replace this use of System.out by a logger.(²ùµşÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125ù"<This block of commented-out lines of code should be removed.(˜…§€ıÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125û"<This block of commented-out lines of code should be removed.(ÄØà¶üÿÿÿÿ8ñ¤õÈÃ1
+Y	java:S125ı"<This block of commented-out lines of code should be removed.(…‰Ôº8ñ¤õÈÃ1
+^	java:S125ÿ"<This block of commented-out lines of code should be removed.(¢Úß¹şÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125"<This block of commented-out lines of code should be removed.(š´¶×ûÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125ƒ"<This block of commented-out lines of code should be removed.(ÈÊƒÙøÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125…"<This block of commented-out lines of code should be removed.(ı¼³Ûıÿÿÿÿ8ñ¤õÈÃ1
+^	java:S125‡"<This block of commented-out lines of code should be removed.(ÊÿÓöúÿÿÿÿ8ñ¤õÈÃ1
+M
+java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ñ¤õÈÃ1
