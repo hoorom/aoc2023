@@ -29,3 +29,15 @@ C
 src/Day10Input.java,9\1\91229281772368b1c4e53aa35e119807b4005bbf
 D
 src/Day10Solved.java,4\5\455ac0aa1c9ac0ce48cd076f97c24e787f5f2750
+>
+src/Day11.java,a\1\a138fb77233dd140bbd9e41c40e9861524507b4d
+C
+src/Day11Input.java,b\f\bf38b6be658927939c24127e261795b59593dbaf
+>
+src/Day12.java,0\a\0a0e924f762703d35533ada712b29011f73107b3
+C
+src/Day12Input.java,b\2\b201d57765c763c130a69736a47feb3fd255a77a
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
