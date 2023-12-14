@@ -41,3 +41,14 @@ S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 ]
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+:
+
+Day14.java,4\c\4cc05ec6c9ed6ad9d140764783d0bc1a155be76a
+>
+src/Day14.java,7\4\747aa38cd30ed4b732e1db6d0bb8deb10bce8a46
+G
+src/fourteen/Day14.java,e\c\ecb14e8cb4dff2063c7704d805289c951bf96307
+L
+src/fourteen/StoneField.java,9\a\9a26874ef78743294c894f03a3fc15906a1d7033
+K
+src/fourteen/StoneLine.java,0\b\0bcea13ea40e6e45490e22a8a3d4fe538da66965
