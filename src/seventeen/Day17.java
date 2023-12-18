@@ -19,20 +19,29 @@ public class Day17 {
             2546548887735
             4322674655533""";
 
-//    static String test = """
-//            2413
-//            3215
-//            4546
-//            4324""";
+    static String minTest = """
+            24134323113
+            32154535356
+            32552456542
+            34465858454
+            45466578675
+            14385987984
+            44578769877
+            36378779796
+            12246868655
+            25465488877
+            43226746555""";
 
     public static void main(String[] args) {
 
         Graph.field = toArray(test);
         Graph originGraph = new Graph(null, null, new Node(new Position(0, 0), null));
+        originGraph.setWeight(0);
         Graph.allGraphs.add(originGraph);
         Graph end = null;
         int i = 0;
         while (end == null) {
+            System.out.println(++i);
             end = originGraph.move();
         }
         String charArray = Graph.createCharArray(Graph.field.length, Graph.field[0].length, end.getPathPositions());
@@ -51,53 +60,4 @@ public class Day17 {
         }
         return array;
     }
-//
-//    public static BGraph calculateShortestPathFromSource(BGraph graph, BNode source) {
-//        source.setDistance(0);
-//
-//        Set<BNode> settledNodes = new HashSet<>();
-//        Set<BNode> unsettledNodes = new HashSet<>();
-//
-//        unsettledNodes.add(source);
-//
-//        while (unsettledNodes.size() != 0) {
-//            BNode currentNode = getLowestDistanceNode(unsettledNodes);
-//            unsettledNodes.remove(currentNode);
-//            for (Map.Entry< Node, Integer> adjacencyPair:
-//                    currentNode.getAdjacentNodes().entrySet()) {
-//                Node adjacentNode = adjacencyPair.getKey();
-//                Integer edgeWeight = adjacencyPair.getValue();
-//                if (!settledNodes.contains(adjacentNode)) {
-//                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
-//                    unsettledNodes.add(adjacentNode);
-//                }
-//            }
-//            settledNodes.add(currentNode);
-//        }
-//        return graph;
-//    }
-//
-//    private static Node getLowestDistanceNode(Set < Node > unsettledNodes) {
-//        Node lowestDistanceNode = null;
-//        int lowestDistance = Integer.MAX_VALUE;
-//        for (Node node: unsettledNodes) {
-//            int nodeDistance = node.getDistance();
-//            if (nodeDistance < lowestDistance) {
-//                lowestDistance = nodeDistance;
-//                lowestDistanceNode = node;
-//            }
-//        }
-//        return lowestDistanceNode;
-//    }
-//
-//    private static void CalculateMinimumDistance(Node evaluationNode,
-//            Integer edgeWeigh, Node sourceNode) {
-//        Integer sourceDistance = sourceNode.getDistance();
-//        if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-//            evaluationNode.setDistance(sourceDistance + edgeWeigh);
-//            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
-//            shortestPath.add(sourceNode);
-//            evaluationNode.setShortestPath(shortestPath);
-//        }
-//    }
 }

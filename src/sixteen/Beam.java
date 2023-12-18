@@ -4,7 +4,6 @@ import graph.Direction;
 import graph.Position;
 import java.util.HashSet;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 
 public class Beam {
 
@@ -197,7 +196,6 @@ public class Beam {
         return sb.toString();
     }
 
-    @NotNull
     public static StringBuilder fieldToString(char[][] array) {
         StringBuilder sb = new StringBuilder();
         for(char[] row : array){

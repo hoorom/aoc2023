@@ -4,12 +4,12 @@ import graph.Direction;
 import graph.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import java.util.TreeSet;
 
 public class Graph implements Comparable<Graph> {
 
@@ -33,7 +33,7 @@ public class Graph implements Comparable<Graph> {
 
     private static final Set<Graph> deadGraph = new HashSet<>();
 
-    public static List<Graph> allGraphs = new LinkedList<>();
+    public static Set<Graph> allGraphs = new TreeSet<>(new GraphComparator());
 
     public Graph(Graph parentGraph, Direction fromDirection, Node node) {
         this.parentGraph = parentGraph;
@@ -48,11 +48,10 @@ public class Graph implements Comparable<Graph> {
     }
 
     private int initWeight() {
-        int weight = 0;
-        Graph ancestor = this;
-        while (ancestor != null) {
-            weight += ancestor.node.getWeight();
-            ancestor = ancestor.getParentGraph();
+        int weight = node.getWeight();
+        Graph ancestor = getParentGraph();
+        if (ancestor != null) {
+            weight += ancestor.getWeight();
         }
         return weight;
     }
@@ -68,7 +67,7 @@ public class Graph implements Comparable<Graph> {
             return null;
         }
 
-        allGraphs.removeFirst();
+        allGraphs.remove(lightestGraph);
         for (Node possibleNode : possibleNodes) {
             Graph subGraph = new Graph(lightestGraph, possibleNode.getFromDirection(), possibleNode);
             allGraphs.add(subGraph);
@@ -84,14 +83,28 @@ public class Graph implements Comparable<Graph> {
         return null;
     }
 
+//    public Graph getMinGraph() {
+//        Graph minGraph = null;
+//        for (Graph graph : allGraphs) {
+//            if(deadGraph.contains(graph)) {
+//                continue;
+//            }
+//            if (minGraph == null || graph.getWeight() < minGraph.getWeight()) {
+//                minGraph = graph;
+//            }
+//        }
+//        return minGraph;
+//    }
+
     public Graph getMinGraph() {
-        Graph minGraph = null;
+
         for (Graph graph : allGraphs) {
-            if (minGraph == null || graph.getWeight() < minGraph.getWeight()) {
-                minGraph = graph;
+            if(deadGraph.contains(graph)) {
+                continue;
             }
+            return graph;
         }
-        return minGraph;
+        throw new RuntimeException();
     }
 
     private List<Node> getPossibleNode() {
@@ -216,7 +229,6 @@ public class Graph implements Comparable<Graph> {
         return sb.toString();
     }
 
-    @NotNull
     public static StringBuilder fieldToString(char[][] array) {
         StringBuilder sb = new StringBuilder();
         for(char[] row : array){
@@ -230,11 +242,11 @@ public class Graph implements Comparable<Graph> {
 
     @Override
     public String toString() {
-        return String.join(" => ", getPathPositions().stream().map(p -> p.toString()).toList());
+        return "(" + weight + ")" + String.join(" => ", getPathPositions().stream().map(Position::toString).toList());
     }
 
     @Override
-    public int compareTo(@NotNull Graph o) {
+    public int compareTo(Graph o) {
 
         if(!getSubGraphs().isEmpty() && o.getSubGraphs().isEmpty() ) {
             return 1;
@@ -252,5 +264,22 @@ public class Graph implements Comparable<Graph> {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Graph graph)) {
+            return false;
+        }
+        return weight == graph.weight && Objects.equals(visitedNode, graph.visitedNode) && Objects.equals(subGraphs, graph.subGraphs) && Objects.equals(node, graph.node)
+                && Objects.equals(parentGraph, graph.parentGraph) && fromDirection == graph.fromDirection;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(visitedNode, subGraphs, node, weight, parentGraph, fromDirection);
     }
 }
