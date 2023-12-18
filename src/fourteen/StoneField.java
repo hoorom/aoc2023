@@ -1,14 +1,14 @@
 package fourteen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class StoneField {
 
     private String field;
+
+    private Integer lastSum;
 
     public StoneField(String field) {
         this.field = field;
@@ -26,6 +26,7 @@ public class StoneField {
 
         bendField();
         rotate();
+
     }
 
     public void rotate() {
@@ -63,20 +64,11 @@ public class StoneField {
         List<List<Character>> lines = initLines();
         List<String> transformedLines = new ArrayList<>();
         for (List<Character> fieldLine : lines) {
-
-            if("#...#...OO".equals(fieldLine.stream().map(String::valueOf).collect(Collectors.joining()))) {
-                System.out.println("debug");
-            }
-
             StoneLine stoneLine = new StoneLine(fieldLine);
             stoneLine.bend();
+            String transformedLine = stoneLine.transformedLine();
 
-            System.out.println("------------------------------");
-            System.out.println(fieldLine.stream().map(String::valueOf).collect(Collectors.joining()));
-            System.out.println(stoneLine.transformedLine());
-            System.out.println("------------------------------");
-
-            transformedLines.add(stoneLine.transformedLine());
+            transformedLines.add(transformedLine);
         }
         field = String.join("\n", transformedLines);
     }
@@ -101,11 +93,41 @@ public class StoneField {
         return fieldLines;
     }
 
+    public Integer getTotalWeight() {
+        List<List<Character>> lines = initLines();
+        int sum = 0;
+        for (List<Character> line : lines) {
+            for (int i = 0; i < line.size(); i++) {
+
+                if(line.get(i) == 'O') {
+                    sum += line.size() - i;
+                }
+            }
+        }
+        return sum;
+    }
+
     public String getField() {
         return field;
     }
 
     public void setField(String field) {
         this.field = field;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof StoneField that)) {
+            return false;
+        }
+        return Objects.equals(field, that.field);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(field);
     }
 }

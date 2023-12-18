@@ -1,6 +1,7 @@
 package fourteen;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Day14 {
 
@@ -119,22 +120,32 @@ public class Day14 {
             #...O.OO#O.O..O...#O.#..#.....O..OO...O..#...#.#.#..O......O..O.O.O.O...#..#O..#..#....#....#....O..""";
 
     public static void main(String[] args) {
-//        StoneField stoneField = new StoneField(input);
-        StoneField stoneField = new StoneField(test);
-        stoneField.cycle();
-        System.out.println(stoneField.getField());
+        StoneField stoneField = new StoneField(input);
+//        StoneField stoneField = new StoneField(test);
+
+        Map<StoneField, Integer> fieldByPos = new HashMap<>();
+
+        for (int i = 0; i < 1_000_000_000; i++) {
+            stoneField.cycle();
+            System.out.println(stoneField.getTotalWeight());
+            if(fieldByPos.containsKey(stoneField)) {
+                Integer firstAppearance = fieldByPos.get(stoneField);
+                int cycleLength = i - firstAppearance;
+                System.out.println("Cycle length: " + cycleLength);
+                System.out.println("Cycle start: " + firstAppearance);
+                int nbRemaining = (1_000_000_000 - firstAppearance) % cycleLength;
+                System.out.println(nbRemaining);
+                for (int j = 0; j < nbRemaining - 1; j++) {
+                    stoneField.cycle();
+                }
+                System.out.println(stoneField.getTotalWeight());
+                return;
+            }
+            fieldByPos.put(stoneField, i);
+        }
 
 
-//        List<StoneLine> lines = stoneField.getLines();
-        int sum = 0;
-//        for (StoneLine line : lines) {
-//            Integer weight = line.getWeight();
-//            System.out.println(weight);
-//            sum += weight;
-//        }
-
-
-        System.out.println(sum);
+        System.out.println(stoneField.getTotalWeight());
     }
 
 }
