@@ -1,0 +1,8 @@
+
+{
+java:S4276"_Refactor this code to use the more specialised Functional Interface 'UnaryOperator<Coordinate>'(Ëˆš8ˆÆœ¬Å1
+y
+java:S42764"\Refactor this code to use the more specialised Functional Interface 'UnaryOperator<Heading>'(±ª‘Ã8ŒÆœ¬Å1
+^	java:S125®"<This block of commented-out lines of code should be removed.(‚æûÂÿÿÿÿÿ8¥Æœ¬Å1
+Š
+java:S1130½"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(£å«8¥ª¦¬Å1

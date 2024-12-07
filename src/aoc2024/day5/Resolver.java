@@ -1,16 +1,18 @@
 package aoc2024.day5;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Resolver {
 
     static Map<Integer, List<Integer>> map = new HashMap<>();
     private static int ok;
+    private static int ok2;
 
     public static void main(String[] args) {
 
@@ -37,14 +39,18 @@ public class Resolver {
                 47|29
                 75|13
                 53|13""";
-        for (String s : rulesTest.lines().toList()) {
+        for (String s : rules.lines().toList()) {
             String[] split = s.split("\\|");
 
-            List<Integer> integers = map.get(Integer.parseInt(split[0]));
+            int val = Integer.parseInt(split[0]);
+            int key = Integer.parseInt(split[1]);
+            List<Integer> integers = map.get(key);
             if(integers == null) {
                 integers = new ArrayList<>();
-                map.put(Integer.parseInt(split[0]), integers);
+                map.put(key, integers);
             }
+            map.get(key).add(val);
+
         }
 
         String input = Input.input;
@@ -55,41 +61,111 @@ public class Resolver {
                 75,97,47,61,53
                 61,13,29
                 97,13,75,29,47""";
-        List<String> list = inputTest.lines().toList();
+        List<String> list = input.lines().toList();
+
+        List<String> wrongs = new ArrayList<>();
         for (String up : list) {
             String[] split = up.split(",");
             List<Integer> numbers = Arrays.stream(split).toList().stream().map(Integer::parseInt).toList();
-            try {
+            boolean cok = false;
 
-                for (int i = 0; i < numbers.size(); i++) {
-                    List<Integer> others = getOthers(i, numbers);
-                    Integer key = numbers.get(i);
-                    List<Integer> targets = map.get(key);
-                    checkDepth(targets, others);
+            for (int i = 0; i < numbers.size(); i++) {
+                List<Integer> others = getOthers(i, numbers);
+                Integer key = numbers.get(i);
+                List<Integer> targets = map.get(key);
+                if(targets == null) {
+                    cok = true;
+                    continue;
                 }
-            } catch (RuntimeException e) {
-            } catch (IOException e1) {
-                ok += numbers.get(numbers.size() / 2 + 1);
+                cok = checkDepth(targets, others);
+                if(!cok) {
+                    break;
+                }
+            }
+
+            if(cok) {
+                //                System.out.println(numbers.toString());
+                System.out.println("Adding : " + numbers.get(numbers.size() / 2));
+                ok += numbers.get(numbers.size() / 2);
+            } else {
+                wrongs.add(up);
             }
 
         }
-        System.out.println(ok);
+
+        for (String wrong : wrongs) {
+            fixWrong(wrong);
+
+        }
+
+        System.out.println(ok2);
     }
 
-    private static void checkDepth(List<Integer> targets, List<Integer> others) throws IOException {
+    private static void fixWrong(String wrong) {
+        boolean fixed = false;
+
+        while(!fixed) {
+            String[] split = wrong.split(",");
+            List<Integer> numbers = Arrays.stream(split).toList().stream().map(Integer::parseInt).toList();
+            for (int i = 0; i < numbers.size(); i++) {
+                List<Integer> others = getOthers(i, numbers);
+                Integer key = numbers.get(i);
+                List<Integer> targets = map.get(key);
+                if(targets == null) {
+                    continue;
+                }
+
+                Integer swap = checkWrong(targets, others);
+                if(swap == null) {
+                    fixed = true;
+                    break;
+                }
+                List<Integer> integers = swapElementsInImmutableList(numbers, i, swap);
+                wrong = integers.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(","));
+
+            }
+        }
+
+        String[] split = wrong.split(",");
+        List<Integer> numbers = Arrays.stream(split).toList().stream().map(Integer::parseInt).toList();
+//        System.out.println("Adding : " + numbers.get(numbers.size() / 2));
+        ok2 += numbers.get(numbers.size() / 2);
+    }
+
+    public static <T> List<T> swapElementsInImmutableList(List<T> list, int index1, int index2) {
+        List<T> mutableList = new ArrayList<>(list);
+        T temp = mutableList.get(index1);
+        mutableList.set(index1, mutableList.get(index2));
+        mutableList.set(index2, temp);
+        return Collections.unmodifiableList(mutableList);
+    }
+
+    private static Integer checkWrong(List<Integer> targets, List<Integer> others) {
         for (Integer integer : targets) {
             if(others.contains(integer)) {
-                throw new RuntimeException();
+                return others.indexOf(integer);
+            }
+        }
+        return null;
+    }
+
+    private static boolean checkDepth(List<Integer> targets, List<Integer> others) {
+        for (Integer integer : targets) {
+            if(others.contains(integer)) {
+                return false;
             }
             List<Integer> depths = map.get(integer);
             if(depths == null || depths.isEmpty()) {
-                throw new IOException();
+                continue;
             }
-            checkDepth(depths, others);
+            //            return checkDepth(depths, others);
         }
+        return true;
     }
 
     public static List<Integer> getOthers(Integer index, List<Integer> numbers) {
-        return numbers.subList(index, numbers.size());
+        return numbers.subList(index + 1, numbers.size());
     }
 }
