@@ -85,7 +85,7 @@ public class Resolver {
 
             if(cok) {
                 //                System.out.println(numbers.toString());
-                System.out.println("Adding : " + numbers.get(numbers.size() / 2));
+//                System.out.println("Adding : " + numbers.get(numbers.size() / 2));
                 ok += numbers.get(numbers.size() / 2);
             } else {
                 wrongs.add(up);
@@ -105,6 +105,7 @@ public class Resolver {
         boolean fixed = false;
 
         while(!fixed) {
+            fixed = true;
             String[] split = wrong.split(",");
             List<Integer> numbers = Arrays.stream(split).toList().stream().map(Integer::parseInt).toList();
             for (int i = 0; i < numbers.size(); i++) {
@@ -117,20 +118,20 @@ public class Resolver {
 
                 Integer swap = checkWrong(targets, others);
                 if(swap == null) {
-                    fixed = true;
-                    break;
+                    continue;
                 }
-                List<Integer> integers = swapElementsInImmutableList(numbers, i, swap);
+                List<Integer> integers = swapElementsInImmutableList(numbers, i, swap + i + 1);
                 wrong = integers.stream()
                         .map(Object::toString)
                         .collect(Collectors.joining(","));
-
+                fixed = false;
+                break;
             }
         }
 
         String[] split = wrong.split(",");
         List<Integer> numbers = Arrays.stream(split).toList().stream().map(Integer::parseInt).toList();
-//        System.out.println("Adding : " + numbers.get(numbers.size() / 2));
+        System.out.println("Adding : " + numbers.get(numbers.size() / 2));
         ok2 += numbers.get(numbers.size() / 2);
     }
 
