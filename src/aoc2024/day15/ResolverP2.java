@@ -41,7 +41,7 @@ public class ResolverP2 {
             if(charAtPosition == '#') {
                 continue;
             } else if(charAtPosition == '.') {
-                plan.move(plan.position);
+                plan.moveWithSwap(plan.position);
             } else if (charAtPosition == '[' || charAtPosition == ']') {
                 swapList = new ArrayList<>();
                 alreadyTreated = new HashSet<>();
@@ -69,7 +69,7 @@ public class ResolverP2 {
 //                    throw new RuntimeException(e);
                 }
                 if(plan.getCharAtPosition(position) == '.') {
-                    plan.move(plan.position);
+                    plan.moveWithSwap(plan.position);
                 }
             }
 

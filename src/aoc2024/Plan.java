@@ -74,7 +74,11 @@ public class Plan {
         position = getPositionForChar(depChar);
     }
 
-    public record Position(int x, int y, Direction direction) {}
+    public record Position(int x, int y, Direction direction) {
+        public Day11.Coordinates coordinates() {
+            return new Day11.Coordinates(this.x, this.y);
+        }
+    }
 
     public Position move(int x, int y, Direction direction) {
         return new Position(x + direction.x, y + direction.y, direction);
@@ -89,6 +93,11 @@ public class Plan {
     }
 
     public void move(Position pos) {
+        Position nextPos = nextPos(pos);
+        this.position = nextPos;
+    }
+
+    public void moveWithSwap(Position pos) {
         Position nextPos = nextPos(pos);
         swapCharPosition(pos, nextPos);
         this.position = nextPos;
@@ -116,6 +125,34 @@ public class Plan {
         if(possible != null) {
             possiblePositions.add(new Day11.Coordinates(possible.x(), possible.y()));
         }
+        return possiblePositions;
+    }
+
+    public List<Position> moveAll(Position position) {
+        List<Position> possiblePositions = new ArrayList<>();
+        List<Direction> possibleDirections = Direction.mapToFollow.get(position.direction);
+        for (Direction possibleDirection : possibleDirections) {
+            Position possible = nextPos(new Position(position.x(), position.y(), possibleDirection));
+            if(possible != null) {
+                possiblePositions.add(new Position(possible.x(), possible.y(), possibleDirection));
+            }
+        }
+
+        //        possible = nextPos(new Position(position.x(), position.y(), Direction.SOUTH));
+        //        if(possible != null) {
+        //            possiblePositions.add(new Position(possible.x(), possible.y(), Direction.SOUTH));
+        //        }
+        //
+        //        possible = nextPos(new Position(position.x(), position.y(), Direction.WEST));
+        //        if(possible != null) {
+        //            possiblePositions.add(new Position(possible.x(), possible.y(), Direction.WEST));
+        //        }
+        //
+        //        possible = nextPos(new Position(position.x(), position.y(), Direction.NORTH));
+        //        if(possible != null) {
+        //            possiblePositions.add(new Position(possible.x(), possible.y(), Direction.NORTH));
+        //        }
+
         return possiblePositions;
     }
 

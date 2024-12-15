@@ -34,11 +34,11 @@ public class Resolver {
             if(charAtPosition == '#') {
                 continue;
             } else if(charAtPosition == '.') {
-                plan.move(plan.position);
+                plan.moveWithSwap(plan.position);
             } else if (charAtPosition == 'O') {
                 tryMoveBox(position);
                 if(plan.getCharAtPosition(position) == '.') {
-                    plan.move(plan.position);
+                    plan.moveWithSwap(plan.position);
                 }
             }
 
