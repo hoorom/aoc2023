@@ -16,9 +16,9 @@ public class ResolverP2 {
     static Set<Plan.Position> alreadyTreated;
 
     public static void main(String[] args) {
-        plan = new Plan(Input.inputEnt, '@', true);
+        plan = new Plan(Input.testLarge, '@', true);
 
-        for (char move : Input.inputMoves.toCharArray()) {
+        for (char move : Input.testMove.toCharArray()) {
 
             System.out.println("Moving : " + move);
 

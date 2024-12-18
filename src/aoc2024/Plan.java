@@ -2,7 +2,10 @@ package aoc2024;
 
 import aoc2023.Day11;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Plan {
 
@@ -28,6 +31,24 @@ public class Plan {
             cols.add(charArray);
         });
     }
+
+    public Plan(int rows, int cols) {
+        this.rows = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < cols; j++) {
+                sb.append('.');
+            }
+            this.rows.add(sb.toString());
+        }
+        this.cols = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            char[] e = new char[cols];
+            Arrays.fill(e, '.');
+            this.cols.add(e);
+        }
+    }
+
 
     public Plan(String plan, char depChar) {
         this(plan, depChar, false);
@@ -72,6 +93,26 @@ public class Plan {
             }
         });
         position = getPositionForChar(depChar);
+    }
+
+    public void dijkstra(Day11.Coordinates from, Day11.Coordinates to, char c) {
+        Map<Day11.Coordinates, Integer> distances = new HashMap<>();
+        Map<Day11.Coordinates, Day11.Coordinates> prev = new HashMap<>();
+        Map<Day11.Coordinates, Boolean> visited = new HashMap<>();
+        distances.put(from, 0);
+        prev.put(from, null);
+        visited.put(from, true);
+        while(!distances.isEmpty()) {
+            Day11.Coordinates current = null;
+            int minDistance = Integer.MAX_VALUE;
+            for (Day11.Coordinates coord : distances.keySet()) {
+                if(distances.get(coord) < minDistance) {
+                    current = coord;
+                }
+            }
+        }
+
+
     }
 
     public record Position(int x, int y, Direction direction) {
@@ -195,6 +236,10 @@ public class Plan {
 
         cols.get(pos1.x())[pos1.y()] = char2;
         cols.get(pos2.x())[pos2.y()] = char1;
+    }
+
+    public void putCharAtCoord(Day11.Coordinates coord, char val) {
+        cols.get(coord.x())[coord.y()] = val;
     }
 
     @Override

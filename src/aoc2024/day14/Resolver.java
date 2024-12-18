@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 public class Resolver {
 
@@ -75,7 +75,7 @@ public class Resolver {
         }
     }
 
-    private static @NotNull List<Robot> initRobots(List<String> list) {
+    private static  List<Robot> initRobots(List<String> list) {
         List<Robot> robots = new ArrayList<>();
         for (String r : list) {
             Matcher matcher = pattern.matcher(r);

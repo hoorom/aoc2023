@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 public class Graph implements Comparable<Graph> {
 
@@ -215,7 +215,6 @@ public class Graph implements Comparable<Graph> {
         return sb.toString();
     }
 
-    @NotNull
     public static StringBuilder fieldToString(char[][] array) {
         StringBuilder sb = new StringBuilder();
         for(char[] row : array){
@@ -233,7 +232,7 @@ public class Graph implements Comparable<Graph> {
     }
 
     @Override
-    public int compareTo(@NotNull Graph o) {
+    public int compareTo( Graph o) {
 
         if(!getSubGraphs().isEmpty() && o.getSubGraphs().isEmpty() ) {
             return 1;
