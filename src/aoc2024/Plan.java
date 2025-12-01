@@ -3,9 +3,9 @@ package aoc2024;
 import aoc2023.Day11;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class Plan {
 
@@ -14,6 +14,8 @@ public class Plan {
     public List<char[]> cols = new ArrayList<>();
 
     public Position position;
+
+
 
     public Plan(String plan, Position position) {
         this.position = position;
@@ -95,27 +97,153 @@ public class Plan {
         position = getPositionForChar(depChar);
     }
 
-    public void dijkstra(Day11.Coordinates from, Day11.Coordinates to, char c) {
-        Map<Day11.Coordinates, Integer> distances = new HashMap<>();
-        Map<Day11.Coordinates, Day11.Coordinates> prev = new HashMap<>();
-        Map<Day11.Coordinates, Boolean> visited = new HashMap<>();
-        distances.put(from, 0);
-        prev.put(from, null);
-        visited.put(from, true);
-        while(!distances.isEmpty()) {
-            Day11.Coordinates current = null;
-            int minDistance = Integer.MAX_VALUE;
-            for (Day11.Coordinates coord : distances.keySet()) {
-                if(distances.get(coord) < minDistance) {
-                    current = coord;
-                }
+    public Plan(Plan other) {
+        this.rows = new ArrayList<>(other.rows);
+        this.cols = new ArrayList<>();
+        for (char[] col : other.cols) {
+            this.cols.add(Arrays.copyOf(col, col.length));
+        }
+        if (other.position != null) {
+            this.position = new Position(other.position.x, other.position.y, other.position.direction);
+        }
+    }
+
+    public int dijkstra(Day11.Coordinates from, Day11.Coordinates to, char c) {
+        Dijkstra dijkstra = new Dijkstra();
+        ArrayList<Position> path = new ArrayList<>();
+        path.add(new Position(from.x(), from.y(), null));
+        DijkstraPath dijkstraPath = new DijkstraPath();
+        dijkstraPath.setPath(path);
+        dijkstra.addNewPathIfLighter(dijkstraPath);
+
+        while (true) {
+            Integer result = runDijkstra(dijkstra, new Position(to.x(), to.y(), null), c);
+            if(result != null) {
+                return result;
             }
         }
+    }
 
+    public int cheatingDijkstra(Day11.Coordinates from, Day11.Coordinates to, List<Day11.Coordinates> cheatingPoints, Dijkstra originaleDijkstra, char c) {
+        Dijkstra dijkstra = new Dijkstra();
+        ArrayList<Position> path = new ArrayList<>();
+        path.add(new Position(from.x(), from.y(), null));
+        DijkstraPath dijkstraPath = new DijkstraPath();
+        dijkstraPath.setPath(path);
+        dijkstra.addNewPathIfLighter(dijkstraPath);
 
+        while (true) {
+            Integer result = runCheatingDijkstra(dijkstra, new Position(to.x(), to.y(), null), cheatingPoints, originaleDijkstra, c);
+            if(result != null) {
+                return result;
+            }
+        }
+    }
+
+    public record DijkstraResult(DijkstraPath dijkstraPath, int result) {}
+
+    public DijkstraResult dijkstraWithResult(Day11.Coordinates from, Day11.Coordinates to, char c) {
+        Dijkstra dijkstra = new Dijkstra();
+        List<Position> path = new ArrayList<>();
+        path.add(new Position(from.x(), from.y(), null));
+        DijkstraPath dijkstraPath = new DijkstraPath();
+        dijkstraPath.setPath(path);
+        dijkstra.addNewPathIfLighter(dijkstraPath);
+
+        while (true) {
+            DijkstraPath winningPath = runDijkstraForPath(dijkstra, new Position(to.x(), to.y(), null), c);
+            if(winningPath != null) {
+                Integer result = winningPath.getCurrentWeight();
+                return new DijkstraResult(winningPath, result);
+            }
+        }
+    }
+
+    private Integer runCheatingDijkstra(Dijkstra dijkstra, Position target, List<Day11.Coordinates> cheatingCoord, Dijkstra originaleDijkstra, char c) {
+        Optional<DijkstraPath> opt = dijkstra.getAllPaths().stream().filter(dp -> !dp.isTreated()).min(Comparator.comparingInt(DijkstraPath::getCurrentWeight));
+        if(!opt.isPresent()) {
+            throw new IllegalArgumentException("Dijkstra path not found");
+        }
+        DijkstraPath lightest = opt.get();
+
+        Position currentPosition = lightest.getCurrentPosition();
+        lightest.setTreated(true);
+
+        List<Position> coordinates = moveAll(currentPosition);
+        for (Position nextCoordinates : coordinates) {
+            if(getCharAtPosition(nextCoordinates) == c) {
+                continue;
+            }
+
+            DijkstraPath dijkstraPath = new DijkstraPath(lightest);
+            dijkstraPath.getPath().add(nextCoordinates);
+            if(nextCoordinates.x == target.x && nextCoordinates.y == target.y) {
+                return dijkstraPath.getCurrentWeight();
+            }
+
+            if (cheatingCoord.contains(currentPosition.coordinates()) && !cheatingCoord.contains(nextCoordinates.coordinates())) {}
+            dijkstra.addNewPathIfLighter(dijkstraPath);
+        }
+        return null;
+    }
+
+    private Integer runDijkstra(Dijkstra dijkstra, Position target, char c) {
+        Optional<DijkstraPath> opt = dijkstra.getAllPaths().stream().filter(dp -> !dp.isTreated()).min(Comparator.comparingInt(DijkstraPath::getCurrentWeight));
+        if(!opt.isPresent()) {
+            throw new IllegalArgumentException("Dijkstra path not found");
+        }
+        DijkstraPath lightest = opt.get();
+
+        Position currentPosition = lightest.getCurrentPosition();
+        lightest.setTreated(true);
+
+        List<Position> coordinates = moveAll(currentPosition);
+        for (Position nextPosition : coordinates) {
+            if(getCharAtPosition(nextPosition) == c) {
+                continue;
+            }
+
+            DijkstraPath dijkstraPath = new DijkstraPath(lightest);
+            dijkstraPath.getPath().add(nextPosition);
+            if(nextPosition.x == target.x && nextPosition.y == target.y) {
+                return dijkstraPath.getCurrentWeight();
+            }
+            dijkstra.addNewPathIfLighter(dijkstraPath);
+        }
+        return null;
+    }
+
+    private DijkstraPath runDijkstraForPath(Dijkstra dijkstra, Position target, char c) {
+        //        Stream<DijkstraPath> dijkstraPathStream = dijkstra.getAllPaths().stream().filter(dp -> !dp.isTreated());
+        //        System.out.println(dijkstraPathStream.count() + " still alive");
+        Optional<DijkstraPath> opt = dijkstra.getAllPaths().stream().filter(dp -> !dp.isTreated()).min(Comparator.comparingInt(DijkstraPath::getCurrentWeight));
+        if(!opt.isPresent()) {
+            throw new IllegalArgumentException("Dijkstra path not found");
+        }
+        DijkstraPath lightest = opt.get();
+
+        //        System.out.println("Currently on : " + lightest);
+        Position currentPosition = lightest.getCurrentPosition();
+        lightest.setTreated(true);
+
+        List<Position> coordinates = moveAll(currentPosition);
+        for (Position nextPosition : coordinates) {
+            if(getCharAtPosition(nextPosition) == c) {
+                continue;
+            }
+
+            DijkstraPath dijkstraPath = new DijkstraPath(lightest);
+            dijkstraPath.getPath().add(nextPosition);
+            if(nextPosition.x == target.x && nextPosition.y == target.y) {
+                return dijkstraPath;
+            }
+            dijkstra.addNewPathIfLighter(dijkstraPath);
+        }
+        return null;
     }
 
     public record Position(int x, int y, Direction direction) {
+
         public Day11.Coordinates coordinates() {
             return new Day11.Coordinates(this.x, this.y);
         }
@@ -171,7 +299,11 @@ public class Plan {
 
     public List<Position> moveAll(Position position) {
         List<Position> possiblePositions = new ArrayList<>();
-        List<Direction> possibleDirections = Direction.mapToFollow.get(position.direction);
+        Direction direction = position.direction;
+        if(direction == null) {
+            direction = Direction.NORTH;
+        }
+        List<Direction> possibleDirections = Direction.mapToFollow.get(direction);
         for (Direction possibleDirection : possibleDirections) {
             Position possible = nextPos(new Position(position.x(), position.y(), possibleDirection));
             if(possible != null) {

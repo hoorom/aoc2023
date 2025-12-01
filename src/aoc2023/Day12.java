@@ -17,6 +17,7 @@ public class Day12 {
     public static String test = """
            ?#?#?#?#?#?#?#? 1,3,1,6""";
 
+
     public static String testWithoutInterrogation = """
             #.#.### 1,1,3
             .#...#....###. 1,1,3
@@ -53,7 +54,7 @@ public class Day12 {
 
         List<String> duplicated = new ArrayList<>();
 
-        equipmentString = STR."\{equipmentString}?\{equipmentString}?\{equipmentString}?\{equipmentString}?\{equipmentString}";
+//        equipmentString = STR."\{equipmentString}?\{equipmentString}?\{equipmentString}?\{equipmentString}?\{equipmentString}";
 
         generateCombinations(equipmentString, duplicated, 0, indication.values);
         System.out.println("Combination generated");
@@ -78,7 +79,7 @@ public class Day12 {
         System.out.println("Computing combination for : " + input);
         for(int i = start; i < input.length(); i++) {
             if(input.charAt(i) == '?') {
-                String newStr = STR."\{input.substring(0, i)}.\{input.substring(i + 1)}";
+                String newStr = "dd";
 
                 List<Integer> resolved = computeCurrentlyResolved(newStr, values.size());
                 for (int k = 0; k < resolved.size(); k++) {
@@ -101,7 +102,7 @@ public class Day12 {
                 generateCombinations(newStr, result, i + 1, values);
 
                 // replace '?' with '#'
-                newStr = STR."\{input.substring(0, i)}#\{input.substring(i + 1)}";
+                newStr = "";
 
                 resolved = computeCurrentlyResolved(newStr, values.size());
 //                if(resolved.size() > values.size()) {
