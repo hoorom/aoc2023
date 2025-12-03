@@ -1,9 +1,7 @@
 package aoc2025.day2;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class Resolver {
