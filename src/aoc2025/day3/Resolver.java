@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 public class Resolver {
 
+
     void main() {
         String input = Input.input;
 

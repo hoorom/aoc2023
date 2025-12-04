@@ -362,6 +362,17 @@ public class Plan {
         return positions;
     }
 
+    public List<Position> getAllPosition() {
+        List<Position> positions = new ArrayList<>();
+        for (int i = 0; i < cols.size(); i++) {
+            char[] row = cols.get(i);
+            for (int j = 0; j < row.length; j++) {
+                    positions.add(new Position(i, j, Direction.NORTH));
+            }
+        }
+        return positions;
+    }
+
     public void swapCharPosition(Position pos1, Position pos2) {
         char char1 = getCharAtPosition(pos1);
         char char2 = getCharAtPosition(pos2);
@@ -384,6 +395,42 @@ public class Plan {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    public char[] getSurroundingChars(Position position) {
+        char[] surroundingChars = new char[8];
+        try {
+            surroundingChars[0] = cols.get(position.x - 1)[position.y];
+        } catch (Exception e) {}
+        try {
+            surroundingChars[1] = cols.get(position.x)[position.y - 1];
+        } catch (Exception e) {}
+
+        try {
+            surroundingChars[2] = cols.get(position.x + 1)[position.y];
+        } catch (Exception e) {}
+        try {
+            surroundingChars[3] = cols.get(position.x)[position.y + 1];
+        } catch (Exception e) {
+        }
+        try {
+            surroundingChars[4] = cols.get(position.x - 1)[position.y - 1];
+        } catch (Exception e) {
+        }
+        try {
+            surroundingChars[5] = cols.get(position.x + 1)[position.y - 1];
+        } catch (Exception e) {
+        }
+        try {
+            surroundingChars[6] = cols.get(position.x - 1)[position.y + 1];
+        } catch (Exception e) {
+        }
+        try {
+            surroundingChars[7] = cols.get(position.x + 1)[position.y + 1];
+        } catch (Exception e) {
+        }
+        return surroundingChars;
+
 
 
     }
